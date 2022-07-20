@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/dadd5e2854.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/info-carro.css">
+    <script src="login.js"></script>
+    <script src="cadastroCarro.js"></script>
+    <style>
+        header nav li#btn-login-out .dropdown-menu {
+            background: rgba(0, 0, 0, .5);
+        
+        }
+
+        header nav li#btn-login-out .dropdown-item {
+            background: rgba(0, 0, 0, 0);
+            color: #ffc107;
+        }
+    </style>
+    <title>Moove</title>
+    <script>
+        // Verifica se o usuário já esta logado e se negativo, redireciona para tela de login        
+        // if (!usuarioCorrente.login) {
+        //     window.location.href = LOGIN_URL;
+        // }
+
+        // function exibeUsuarios() {
+
+        //     // Popula a tabela com os registros do banco de dados
+        //     let listaUsuarios = '';
+        //     for (i = 0; i < db_usuarios.usuarios.length; i++) {
+        //         let usuario = db_usuarios.usuarios[i];
+        //         listaUsuarios += `<tr><td scope="row">${usuario.nome}</td><td>${usuario.login}</td><td>${usuario.email}</td></tr>`;
+        //     }
+
+        //     // Substitui as linhas do corpo da tabela
+        //     document.getElementById("table-usuarios").innerHTML = listaUsuarios
+
+        // }
+
+        function initPage() {
+
+            debugger
+            // Associa a função de logout ao botão
+            //document.getElementById('btn_logout').addEventListener('click', logoutUser);
+
+            // Informa o nome do usuário logado
+
+            if (typeof usuarioCorrente.nome != "undefined") {
+                document.getElementById('btn-login-out').innerHTML = `
+                    <div class="dropdown">
+                        <a class="btn btn-outline-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                            <span id="nomeUsuario">
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a onclick="logoutUser();" class="dropdown-item" href="#">Logout</a>
+                                  
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('nomeUsuario').innerHTML = usuarioCorrente.nome;
+                document.getElementById('cadastrarCarro').hidden = false;
+            }
+            else {
+                document.getElementById('cadastrarCarro').hidden = true;
+                document.getElementById('nomeUsuario').innerHTML = 'Logar';
+            }
+            
+            // Lista os usuários 
+            //exibeUsuarios ();
+        }
+        function  verificarLogadoCadastro()
+        {
+            debugger
+            if (typeof usuarioCorrente.nome == "undefined") 
+            {
+                alert("Favor logar");
+                window.location.href = 'login.html';
+            }
+            else
+                window.location.href = 'cadastroCarro.html';
+            
+            
+        }
+        window.addEventListener('load', initPage);
+    </script>
+</head>
+
+<body onload="mapearDadosCarro()">
+
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top navbar-transparente">
+            <div class="container">
+
+
+                <a href="index.html" class="navbar-brand">
+                    <img src="img/logos.png" width="142px">
+                </a>
+
+                <button class="navbar-toggler" data-toggle="collapse" data-target="#nav-principal">
+                    <i class="fas fas-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="nav-principal">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="lista_carro.html" class="nav-link">Carros Disponíveis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.html#planos" class="nav-link">Sobre a Moove</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.html#depoimento" class="nav-link">Avaliações</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="cadastrarCarro.html" id="cadastrarCarro" class="nav-link">Cadastre seu Carro</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                                <a href="" class="nav-link" id="nomeUsuario">Perfil Usuário</a>
+                            </li> -->
+                        <li class="nav-item divisor"></li>
+                        <li id="btn-login-out" class="nav-item">
+                            <a href="login.html" class="btn btn-outline-warning ml-4"><span id="nomeUsuario"></span></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    <!--fim cabeçalho-->
+
+    <section id="home">
+
+    </section>
+    <!--fim home-->
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-2 d-none d-md-block p-1">
+                    <img src="img/logos.png" width="100">
+                </div>
+                <div class="col-md-10" >
+                    <ul>
+                        <li><a href="">
+                                <img src="img/facebook.png">
+                            </a></li>
+                        <li><a href="">
+                                <img src="img/twitter.png">
+                            </a></li>
+                        <li><a href="">
+                                <img src="img/instagram.png">
+                            </a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script>
+
+        function cadastrarCarro() {
+            // Cancela a submissão do formulário para tratar sem fazer refresh da tela
+            if (typeof usuarioCorrente.nome == "undefined") {
+                alert("Por favor, faça o login")
+            }
+            else {
+
+                alert("Em desenvolvimento")
+            }
+
+        }
+
+        function mapearDadosCarro()
+        {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            debugger
+            var carro = db.carros.find(x => {
+                return x.id == urlParams.get('id')
+            } )
+            if(!carro)
+            {
+                alert("Selecione um carro")
+                window.location.href = "lista_carro.html"
+            }
+
+            document.getElementById('home').innerHTML = `        <!--Início Home-->
+        <div id="info-carro">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-4 caixa">
+                        <div class="b-esquerda">
+                            <h6>${carro.nomeCarro}</h6>
+                            <h6 class="valor">$120.000</h6>
+                            <hr>
+                            <p>CATEGORIA: <span> ${carro.categoria}</span></p>
+                            <p>CONDIÇÃO: <span>${carro.condicao}</span></p>
+                            <p>ANO: <span>${carro.ano}</span></p>
+                            <p>QUILOMETRAGEM:<span>${carro.km}</span></p>
+                            <p>ASSENTOS: <span>${carro.lugares}</span></p>
+                            <p>MOTOR: <span>${carro.motor}</span></p>
+                            <p>COR: <span>${carro.cor}</span></p>
+                            <hr>
+                            <p class="texto">${carro.descricao}</p>
+
+                            <div>
+                                <button class="btn btn-amarelo" onclick="cadastrarCarro()" type="button">ALUGAR</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 caixa">
+                        <div class="row carros">
+                            <div class="col-md-12">
+                                <img src=${carro.imagem} class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>`
+        }
+
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
